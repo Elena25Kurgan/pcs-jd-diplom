@@ -15,12 +15,17 @@
     </properties>
 
     <dependencies>
-<!--        <dependency>-->
-<!--            <groupId>com.itextpdf</groupId>-->
-<!--            <artifactId>itext7-core</artifactId>-->
-<!--            <version>7.1.15</version>-->
-<!--            <type>pom</type>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itext7-core</artifactId>
+            <version>7.1.15</version>
+            <type>pom</type>
+        </dependency>
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
@@ -30,6 +35,84 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.Kloping</groupId>
+            <artifactId>JvUtils</artifactId>
+            <version>0.4.2</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.alfonsoLeandro</groupId>
+            <artifactId>MPUtils</artifactId>
+            <version>1.9.3</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.menglim</groupId>
+            <artifactId>DbUtils</artifactId>
+            <version>1.2.13</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.roughy.http.util</groupId>
+            <artifactId>HttpServletRequestX</artifactId>
+            <version>0.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.911992</groupId>
+            <artifactId>WebSocket_HandshakeRequest_to_Servlet31_HttpServletRequest_Wrapper</artifactId>
+            <version>0.1.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.mtvnet.boxspring.modules</groupId>
+            <artifactId>boxspring-http-objects-holder</artifactId>
+            <version>1.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.jhannes</groupId>
+            <artifactId>fake-servlet</artifactId>
+            <version>0.0.39</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sandeepkaul</groupId>
+            <artifactId>javax-mutalble-request</artifactId>
+            <version>1.0.3</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sandeepkaul</groupId>
+            <artifactId>javax-mutable-request</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.faendir.ziplet</groupId>
+            <artifactId>ziplet</artifactId>
+            <version>2.4.3</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jexbox.connector</groupId>
+            <artifactId>jexbox-http</artifactId>
+            <version>0.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ziplet</groupId>
+            <artifactId>ziplet</artifactId>
+            <version>2.4.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.mattunderscore</groupId>
+            <artifactId>filter-utils</artifactId>
+            <version>0.2.8</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

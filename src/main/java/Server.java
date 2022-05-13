@@ -7,55 +7,43 @@ import com.sun.net.httpserver.HttpServer;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.net.InetSocketAddress;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.net.ServerSocket;
 import java.util.List;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
-public class GServer {
+public class Server {
     public static final int PORT = 8989;
     private static final int BUFFER_SIZE = 200;
 
-    private final HttpServer server;
-    private final BooleanSearchEngine searchEngine;
+    private int port;
+    private String directory;
+    BooleanSearchEngine searchEngine;
+    private HttpServer httpServer;
 
-    public GServer(BooleanSearchEngine searchEngine) throws Exception {
-        if (searchEngine == null) {
-            throw new IllegalArgumentException("Серверу нужно передать в конструктор объект-поиска, а было передано null.");
-        }
+
+    public Server(int port, String directory, BooleanSearchEngine searchEngine) throws Exception {
+        this.port = port;
+        this.directory = directory;
         this.searchEngine = searchEngine;
-
-        server = HttpServer.create(new InetSocketAddress("localhost", PORT), 0);
-        server.createContext("/", this::serveHtml);
-        server.createContext("/search", this::serveSearch);
     }
 
     public void start() {
         System.out.println("Запускаем сервер на порту " + PORT);
         System.out.println("Открой в браузере http://localhost:8989/");
-        server.start();
+        try (var server = new ServerSocket(this.port)) {
+            while (true) {
+                var socket = server.accept();
+//                var thread = new Handler(socket, this.directory);
+                var thread = new Handler(server, socket);
+                thread.start();
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-
-    protected void serveHtml(HttpExchange t) throws IOException {
-        Path html = Path.of("assets/index.html");
-        var htmlContent = Files.readString(html);
-        var jsPath = Path.of("assets/my.js");
-        var jsContent = Files.readString(jsPath);
-        var htmlBytes = htmlContent.replace("JS", jsContent).getBytes();
-        t.sendResponseHeaders(200, htmlBytes.length);
-        t.getResponseBody().write(htmlBytes);
-        t.close();
-    }
-
-//    protected void serveHtml(HttpExchange h) throws IOException {
-//        var htmlPath = Path.of("assets/index.html");
-//        var htmlContent = Files.readString(htmlPath);
-//        var jsPath = Path.of("assets/my.js");
-//        var jsContent = Files.readString(jsPath);
-//        var htmlBytes = htmlContent.replace("JS", jsContent).getBytes();
-//        h.sendResponseHeaders(200, htmlBytes.length);
-//        h.getResponseBody().write(htmlBytes);
-//        h.close();
-//    }
 
     private static String listToJson(List<PageEntry> list) {
         Type listType = new TypeToken<List<PageEntry>>() {
@@ -74,8 +62,8 @@ public class GServer {
             h.sendResponseHeaders(200, 0);
             try (BufferedOutputStream out = new BufferedOutputStream(h.getResponseBody())) {
                 try (ByteArrayInputStream bis = new ByteArrayInputStream(listJson.getBytes())) {
-                    byte [] buffer = new byte [BUFFER_SIZE];
-                    int count ;
+                    byte[] buffer = new byte[BUFFER_SIZE];
+                    int count;
                     while ((count = bis.read(buffer)) != -1) {
                         out.write(buffer, 0, count);
                     }
