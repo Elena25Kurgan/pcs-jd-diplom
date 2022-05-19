@@ -6,16 +6,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-//Реализация поискового движка, которую вам предстоит написать. Слово
-//Boolean пришло из теории информационного поиска, тк наш движок будет
-//искать в тексте ровно то слово, которое было указано, без использования
-//синонимов и прочих приёмов нечётного поиска
 public class BooleanSearchEngine implements SearchEngine {
     HashMap<String, List<PageEntry>> pageEntryHashMap = new HashMap<>();
 
-    public BooleanSearchEngine(File pdfsDir) throws IOException {
+    public BooleanSearchEngine(File pdfsDir) {
         if (pdfsDir.isDirectory()) {
-            // получаем все файлы в каталоге
             File[] files = pdfsDir.listFiles();
             if (files != null) {
                 for (File item : files) {
@@ -49,28 +44,25 @@ public class BooleanSearchEngine implements SearchEngine {
                     } catch (IOException ex) {
                         System.out.println("Ошибка: " + ex.getMessage());
                     }
-
                 }
             }
         }
     }
 
-    //подсчёта частоты слов
     private Map<String, Integer> countingNumberWords(String[] words) {
-        Map<String, Integer> freqs = new HashMap<>();
+        Map<String, Integer> mapWordNum = new HashMap<>();
         for (var word : words) {
             if (word.isEmpty()) {
                 continue;
             }
-            int num = freqs.getOrDefault(word.toLowerCase(), 0) + 1;
-            freqs.put(word.toLowerCase(), num);
+            int num = mapWordNum.getOrDefault(word.toLowerCase(), 0) + 1;
+            mapWordNum.put(word.toLowerCase(), num);
         }
-        return freqs;
+        return mapWordNum;
     }
 
     @Override
     public List<PageEntry> search(String word) {
-        // тут реализуйте поиск по слову
         if ((pageEntryHashMap.get(word)) != null) {
             return pageEntryHashMap.get(word);
         } else {
