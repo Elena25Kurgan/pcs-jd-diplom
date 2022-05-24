@@ -1,37 +1,23 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
 
-public class Client extends Socket {
+public class Client {
 
-    static Socket socket;
-    private final int port;
+    public static void main(String[] args) {
+        String host = "localhost";
+        int port = 8989;
+        try (Socket clientSocket = new Socket(host, port);
+             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
+            out.println("бизнес");
 
-    public Client(int port) {
-        this.port = port;
-        this.start();
-    }
-
-    private void start() {
-        try {
-            socket = new Socket("localhost", port);
-            System.out.println("Клиент, подключен к сокету");
-//            Thread.sleep(2000);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void run() throws IOException {
-        try (var out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()))) {
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Введите слово для поиска или введите `end` для завершения работы програмы: ");
-            String input = scanner.nextLine();
-            if ("end".equals(input)) {
-                input = "end";
-            }
-            out.write(input);
-            out.flush();
+            String resp = in.readLine();
+            System.out.println(resp);
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
         }
     }
 }

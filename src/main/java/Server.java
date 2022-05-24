@@ -13,32 +13,21 @@ public class Server {
     }
 
     public void start() {
-        try (ServerSocket server = new ServerSocket(this.port)) {
-            System.out.println("Запускаем сервер на порту " + port);
-            while (true) {
-                Client client = new Client(port);
-                client.run();
-                try (Socket socket = server.accept();
-                     var in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                     PrintWriter out = new PrintWriter(socket.getOutputStream())) {
-                    var word = "";
-                    while (in.ready()) {
-                        word = in.readLine();
-                        if (word.equals("end")) {
-                            break;
-                        }
-                        String listJson = new SearchWord(searchEngine).search(word);
-                        out.write(listJson);
-                        out.flush();
-                        out.close();
-                        PrintOut(listJson);
-                    }
-                    if (word.equals("end")) {
-                        System.out.println("Поиск закончен, программа завершена!");
-                        break;
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
+
+        try (ServerSocket serverSocket = new ServerSocket(this.port)) { // стартуем сервер один(!) раз
+            while (true) { // в цикле(!) принимаем подключения
+                System.out.println("Ожидаем подключения...");
+                try (
+                        Socket socket = serverSocket.accept();
+                        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                        PrintWriter out = new PrintWriter(socket.getOutputStream())
+                ) {
+                    System.out.println("Пошло подключение");
+                    var word = in.readLine();
+                    String listJson = new SearchWord(searchEngine).search(word);
+                    out.write(listJson);
+                    out.close();
+                    PrintOut(listJson);
                 }
             }
         } catch (IOException e) {
